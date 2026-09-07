@@ -1,68 +1,86 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Homestead HQ — Livestock records for small farms</title>
-<meta name="description" content="Livestock records, breeding and important dates for small farms and homesteads. Works offline, keeps your data on your own device.">
+<title>Homestead HQ — offline farm & homestead records</title>
+<meta name="description" content="Simple, offline record-keeping for small farms and homesteads. Track animals, health, breeding, and your garden — all on your phone. Free.">
 <style>
-  :root { color-scheme: light dark; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    max-width: 34rem; margin: 0 auto; padding: 4rem 1.5rem;
-    background: #FBF7F0; color: #2E251E; line-height: 1.65; font-size: 17px;
+  :root{
+    --cream:#f4efe2; --card:#fbf7ee; --ink:#3f5236; --tag:#5e7a50; --muted:#6b6a5e;
+    --sage:#6e8e5e; --sage-d:#5a7a4c; --edge:#e2dac6; --straw:#c9a24a;
   }
-  h1 { font-size: 2rem; margin-bottom: 0.4rem; letter-spacing: -0.01em; }
-  .tagline { color: #6B5B4C; font-size: 1.05rem; margin-top: 0; }
-  ul { padding-left: 1.2rem; margin: 1.75rem 0; }
-  li { margin-bottom: 0.5rem; }
-  .status {
-    background: #F3EADB; border-radius: 10px; padding: 1rem 1.15rem; margin: 2rem 0;
-    font-size: 0.95rem;
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--cream); color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    min-height:100vh; display:flex; flex-direction:column;
+    -webkit-font-smoothing:antialiased;
   }
-  a { color: #4F6B4A; }
-  footer {
-    margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid #E0D3C0;
-    color: #6B5B4C; font-size: 0.9rem;
-  }
-  @media (prefers-color-scheme: dark) {
-    body { background: #1A1917; color: #F0EBE2; }
-    .tagline, footer { color: #B8B0A3; }
-    .status { background: #26241F; }
-    a { color: #8FB07F; }
-    footer { border-top-color: #3A362F; }
-  }
+  .wrap{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:48px 22px 24px; max-width:640px; margin:0 auto;}
+  .logo{width:96px;height:96px;margin-bottom:20px}
+  h1{font-family:Georgia,"Times New Roman",serif; font-weight:700; font-size:clamp(34px,7vw,52px);
+    margin:0; letter-spacing:-.01em;}
+  .tag{color:var(--tag); font-size:clamp(16px,3.6vw,20px); font-weight:600; margin:10px 0 0;}
+  .sub{color:var(--muted); font-size:16px; line-height:1.6; margin:18px 0 0; max-width:520px;}
+  .btns{display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin:30px 0 0; width:100%;}
+  .btn{flex:1 1 220px; max-width:300px; text-decoration:none; font-size:17px; font-weight:700;
+    padding:16px 22px; border-radius:14px; border:2px solid var(--sage); transition:transform .05s ease, background .15s ease;}
+  .btn:active{transform:scale(.98)}
+  .btn.primary{background:var(--sage); color:#f4efe2; border-color:var(--sage);}
+  .btn.primary:hover{background:var(--sage-d); border-color:var(--sage-d);}
+  .btn.ghost{background:transparent; color:var(--ink);}
+  .btn.ghost:hover{background:#eaf0e1;}
+  .note{color:var(--muted); font-size:13.5px; line-height:1.6; margin:22px 0 0;}
+  .field{display:block; width:100%; height:auto;}
+  footer{text-align:center; color:var(--muted); font-size:12.5px; padding:14px; background:var(--sage);
+    color:#eef1e6;}
+  footer a{color:#eef1e6;}
+  @media (max-width:480px){ .btn{flex:1 1 100%;} }
 </style>
 </head>
 <body>
+  <main class="wrap">
+    <svg class="logo" viewBox="0 0 100 100" role="img" aria-label="Homestead HQ logo">
+      <circle cx="50" cy="50" r="50" fill="#6e8e5e"/>
+      <g transform="translate(50,53) scale(0.62) translate(-50,-53)">
+        <polygon points="12,52 50,16 88,52" fill="#f5efe1"/>
+        <rect x="20" y="50" width="60" height="40" fill="#f5efe1"/>
+        <circle cx="50" cy="41" r="6" fill="#6e8e5e"/>
+        <rect x="42" y="60" width="16" height="30" fill="#6e8e5e"/>
+        <path d="M42 60 L58 90 M58 60 L42 90" stroke="#f5efe1" stroke-width="2.6" fill="none"/>
+      </g>
+    </svg>
+    <h1>Homestead HQ</h1>
+    <p class="tag">Offline farm &amp; homestead records</p>
+    <p class="sub">Keep your animals' health, breeding, and important dates, track cost and profit per animal, and log your garden's plantings and harvests — all on your phone. No cloud, no accounts, no ads.</p>
 
-<h1>My Homestead HQ</h1>
-<p class="tagline">Livestock records for small farms and homesteads.</p>
+    <div class="btns">
+      <a class="btn primary" href="https://homestead-hq-demo.netlify.app">Try the demo</a>
+      <!-- UPDATE this href whenever you publish a new Android build (the URL changes each build). -->
+      <a class="btn ghost" href="https://expo.dev/accounts/homesteadhqdemo/projects/my-homestead-hq/builds/4be59a69-b051-461a-9a02-42d06414ad85">Download for Android</a>
+    </div>
 
-<p>Keep track of the things that actually matter when you're the one doing chores:
-who's bred, who's due, what treatment they had and when it clears, and what the
-whole thing is costing you.</p>
+    <p class="note">Free for small farms · The demo runs in any browser · The Android app is in early testing and installs directly</p>
+  </main>
 
-<ul>
-  <li>Health records, vaccinations, and withdrawal periods</li>
-  <li>Breeding records, due dates, and multi-generation lineage</li>
-  <li>Costs and profit tracked per animal, not just per farm</li>
-  <li>Chores and reminders that don't nag you for missing a week</li>
-  <li>Cattle, goats, poultry — or set up your own animal in about thirty seconds</li>
-</ul>
+  <svg class="field" viewBox="0 0 1200 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <rect width="1200" height="200" fill="#f4efe2"/>
+    <circle cx="1052" cy="58" r="58" fill="#f4d98f"/><circle cx="1052" cy="58" r="40" fill="#edc067"/>
+    <path d="M0 118 Q300 94 600 110 T1200 106 L1200 200 L0 200 Z" fill="#8aa676"/>
+    <path d="M0 150 Q350 124 700 144 T1200 140 L1200 200 L0 200 Z" fill="#6e8e5e"/>
+    <g id="stalks" stroke="#c9a24a" stroke-width="3.2" stroke-linecap="round" fill="none">
+      <g transform="translate(120,150)"><path d="M0 0V-64"/><path d="M0 -26l9 -7M0 -26l-9 -6M0 -36l8 -6M0 -36l-8 -5M0 -46l7 -6M0 -46l-7 -5M0 -56l6 -5M0 -56l-6 -4"/></g>
+      <g transform="translate(150,152) rotate(12)"><path d="M0 0V-58"/><path d="M0 -24l8 -6M0 -24l-8 -5M0 -34l7 -6M0 -34l-7 -5M0 -44l6 -5M0 -44l-6 -4M0 -52l5 -4M0 -52l-5 -4"/></g>
+      <g transform="translate(90,152) rotate(-12)"><path d="M0 0V-58"/><path d="M0 -24l8 -6M0 -24l-8 -5M0 -34l7 -6M0 -34l-7 -5M0 -44l6 -5M0 -44l-6 -4M0 -52l5 -4M0 -52l-5 -4"/></g>
+      <g transform="translate(1075,150)"><path d="M0 0V-64"/><path d="M0 -26l9 -7M0 -26l-9 -6M0 -36l8 -6M0 -36l-8 -5M0 -46l7 -6M0 -46l-7 -5M0 -56l6 -5M0 -56l-6 -4"/></g>
+      <g transform="translate(1105,152) rotate(12)"><path d="M0 0V-58"/><path d="M0 -24l8 -6M0 -24l-8 -5M0 -34l7 -6M0 -34l-7 -5M0 -44l6 -5M0 -44l-6 -4"/></g>
+      <g transform="translate(1045,152) rotate(-12)"><path d="M0 0V-58"/><path d="M0 -24l8 -6M0 -24l-8 -5M0 -34l7 -6M0 -34l-7 -5M0 -44l6 -5M0 -44l-6 -4"/></g>
+    </g>
+  </svg>
 
-<div class="status">
-  <strong>Works in the barn.</strong> Everything lives on your own device, so it
-  works with no signal at all. No account to create, and nothing gets uploaded
-  anywhere.
-</div>
-
-<p><em>In development. Coming to iPhone and Android.</em></p>
-
-<footer>
-<a href="/support.html">Support</a> · <a href="/privacy.html">Privacy</a> ·
-<a href="mailto:support@myhomesteadhq.com">support@myhomesteadhq.com</a>
-</footer>
-
+  <footer>© 2026 Homestead HQ · your data stays on your device · <a href="privacy.html">Privacy</a> · <a href="support.html">Support</a></footer>
 </body>
 </html>
