@@ -21,8 +21,8 @@
     background:var(--page);
     font-family:var(--sans);
     color:var(--cream);
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    min-height:100vh; gap:14px; padding:12px;
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+    min-height:100dvh; gap:12px; padding:14px 12px 26px;
   }
   .fit{display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 
@@ -374,7 +374,8 @@
 
   // scale the 405x720 stage to fit the viewport
   function fit(){
-    var availH=window.innerHeight-150, availW=window.innerWidth-48;
+    var vh=(window.visualViewport&&window.visualViewport.height)||window.innerHeight;
+    var availH=vh-140, availW=window.innerWidth-40;
     var s=Math.min(availW/405, availH/720); if(!isFinite(s)||s<=0) s=1; s=Math.min(s,1.35);
     curScale=s;
     stage.style.transform='scale('+s+')';
@@ -382,9 +383,12 @@
     stage.parentElement.style.height=(720*s)+'px';
   }
   window.addEventListener('resize',fit);
+  window.addEventListener('orientationchange',function(){ setTimeout(fit,200); });
+  if(window.visualViewport){ window.visualViewport.addEventListener('resize',fit); }
   document.getElementById('replay').addEventListener('click',start);
 
   fit(); start();
+  setTimeout(fit,300); setTimeout(fit,1000); // re-fit after the mobile URL bar settles
 })();
 </script>
 </body></html>
