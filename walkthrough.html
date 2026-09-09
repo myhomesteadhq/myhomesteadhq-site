@@ -2,12 +2,10 @@
 <title>Homestead HQ Walkthrough</title>
 <style>
   :root{
-    /* Stage / brand palette (committed single look) */
     --cream:#f4efe2; --cream-2:#efe8d6;
     --sage:#6e8e5e; --sage-deep:#5e7a50; --hill:#8aa676;
     --ink:#3f5236; --straw:#c9a24a; --sun:#edc067; --glow:#f4d98f;
-    --page:#1c2018;              /* backdrop outside the stage */
-    /* App UI (dark, warm near-black) */
+    --page:#1c2018;
     --app-bg:#0f120d; --app-surf:#191d15; --app-card:#20261c;
     --app-line:#2c3327; --app-text:#eef0e8; --app-muted:#8b9584;
     --app-accent:#7d9c68; --app-accent-ink:#0f120d;
@@ -17,75 +15,63 @@
   }
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
-  body{
-    background:var(--page);
-    font-family:var(--sans);
-    color:var(--cream);
-    display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
-    min-height:100dvh; gap:12px; padding:14px 12px 26px;
-  }
-  .fit{display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  body{background:var(--page); font-family:var(--sans); color:var(--cream); overflow:hidden}
+  .wrap{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:var(--page); overflow:hidden; cursor:pointer}
 
-  /* ---- 9:16 stage, designed at 405x720 then scaled to fit ---- */
+  /* full-screen stage: designed 405 wide, scaled to fill the whole screen */
   .stage{
-    width:405px; height:720px; transform-origin:center center;
-    background:
-      radial-gradient(120% 80% at 50% -10%, var(--cream) 0%, var(--cream-2) 70%, #e7dfca 100%);
-    border-radius:26px; position:relative; overflow:hidden;
+    width:405px; transform-origin:center center;
+    background:radial-gradient(125% 70% at 50% -8%, var(--cream) 0%, var(--cream-2) 72%, #e7dfca 100%);
+    position:relative; overflow:hidden;
     display:flex; flex-direction:column; align-items:center;
-    padding:26px 26px 22px; box-shadow:0 30px 70px rgba(0,0,0,.45);
+    padding:34px 24px 30px;
   }
-  /* soft rolling hills at the base of the stage */
-  .stage::before{
-    content:""; position:absolute; left:0; right:0; bottom:0; height:190px;
+  .stage::before{ /* rolling hills at the base */
+    content:""; position:absolute; left:0; right:0; bottom:0; height:210px;
     background:
       radial-gradient(140% 100% at 25% 120%, var(--hill) 0 55%, transparent 56%),
       radial-gradient(150% 100% at 90% 128%, var(--sage) 0 55%, transparent 56%);
     opacity:.9;
   }
   .stage::after{ /* warm sun, top-right */
-    content:""; position:absolute; top:44px; right:40px; width:66px; height:66px; border-radius:50%;
-    background:radial-gradient(circle, var(--sun) 0 46%, var(--glow) 47% 100%);
-    opacity:.85;
+    content:""; position:absolute; top:52px; right:42px; width:70px; height:70px; border-radius:50%;
+    background:radial-gradient(circle, var(--sun) 0 46%, var(--glow) 47% 100%); opacity:.85;
   }
 
-  /* ---- brand strip ---- */
-  .brand{display:flex; align-items:center; gap:10px; z-index:3}
-  .brand .barn{width:30px; height:30px; display:block}
-  .brand .wm{font-family:var(--serif); font-weight:700; font-size:21px; color:var(--ink); letter-spacing:.2px}
+  .brand{flex:0 0 auto; display:flex; align-items:center; gap:10px; z-index:3}
+  .brand .barn{width:32px; height:32px; display:block}
+  .brand .wm{font-family:var(--serif); font-weight:700; font-size:22px; color:var(--ink); letter-spacing:.2px}
 
-  /* ---- phone ---- */
+  .mid{flex:1 1 auto; min-height:0; width:100%; display:flex; align-items:center; justify-content:center}
+
   .phone{
-    z-index:3; margin-top:20px; width:252px; height:474px; border-radius:34px;
-    background:#000; padding:9px; box-shadow:0 18px 34px rgba(50,60,40,.34), 0 2px 0 rgba(255,255,255,.5) inset;
-    position:relative;
+    z-index:3; width:264px; height:530px; border-radius:38px;
+    background:#000; padding:9px; position:relative;
+    box-shadow:0 18px 34px rgba(50,60,40,.34), 0 2px 0 rgba(255,255,255,.5) inset;
   }
-  .screenwrap{position:relative; width:100%; height:100%; border-radius:26px; overflow:hidden; background:var(--app-bg)}
+  .screenwrap{position:relative; width:100%; height:100%; border-radius:30px; overflow:hidden; background:var(--app-bg)}
 
-  /* stacked app screens */
-  .screen{position:absolute; inset:0; display:flex; flex-direction:column; opacity:0; }
+  .screen{position:absolute; inset:0; display:flex; flex-direction:column; opacity:0}
   .screen.on{opacity:1}
   @media (prefers-reduced-motion:no-preference){
     .screen{transition:opacity .55s ease, transform .55s ease; transform:translateY(10px) scale(.995)}
     .screen.on{transform:none}
   }
 
-  /* --- app chrome --- */
-  .status{display:flex; justify-content:space-between; align-items:center; padding:8px 14px 2px; color:var(--app-text); font-size:9px; font-weight:600; opacity:.85}
+  .status{display:flex; justify-content:space-between; align-items:center; padding:9px 15px 2px; color:var(--app-text); font-size:9px; font-weight:600; opacity:.85}
   .status .dots{display:flex; gap:3px; align-items:center}
   .status .bar{width:3px; height:7px; background:var(--app-text); border-radius:1px; opacity:.9}
   .status .bat{width:14px; height:7px; border:1px solid var(--app-text); border-radius:2px; position:relative}
   .status .bat::after{content:""; position:absolute; inset:1px; right:4px; background:var(--app-accent); border-radius:1px}
-  .apphead{padding:6px 15px 8px; color:var(--app-text)}
-  .apphead h1{margin:0; font-size:17px; font-weight:700; letter-spacing:.2px}
+  .apphead{padding:6px 16px 8px; color:var(--app-text)}
+  .apphead h1{margin:0; font-size:18px; font-weight:700; letter-spacing:.2px}
   .apphead .sub{font-size:10px; color:var(--app-muted); margin-top:2px}
-  .body{flex:1; overflow:hidden; padding:2px 13px 8px; display:flex; flex-direction:column; gap:7px}
+  .body{flex:1; overflow:hidden; padding:2px 14px 8px; display:flex; flex-direction:column; gap:7px}
 
-  /* cards / rows */
   .card{background:var(--app-card); border:1px solid var(--app-line); border-radius:12px; padding:9px 10px; color:var(--app-text)}
   .row{display:flex; align-items:center; gap:9px}
-  .emoji{font-size:18px; width:26px; height:26px; display:flex; align-items:center; justify-content:center; background:var(--app-surf); border-radius:8px; flex:0 0 auto}
-  .t{font-size:11.5px; font-weight:600; line-height:1.25}
+  .emoji{font-size:18px; width:27px; height:27px; display:flex; align-items:center; justify-content:center; background:var(--app-surf); border-radius:8px; flex:0 0 auto}
+  .t{font-size:12px; font-weight:600; line-height:1.25}
   .s{font-size:9.5px; color:var(--app-muted); margin-top:1px; line-height:1.25}
   .push{margin-left:auto}
   .when{font-size:9px; color:var(--app-muted); white-space:nowrap}
@@ -93,12 +79,10 @@
   .flag .when{color:var(--alert); font-weight:700}
   .lede{font-size:9.5px; color:var(--app-muted); text-transform:uppercase; letter-spacing:.6px; margin:3px 1px 0}
 
-  /* filter chips */
   .chips{display:flex; gap:6px; flex-wrap:wrap}
   .chip{font-size:9.5px; font-weight:600; color:var(--app-text); background:var(--app-surf); border:1px solid var(--app-line); border-radius:999px; padding:5px 9px}
   .chip.on{background:var(--app-accent); border-color:var(--app-accent); color:var(--app-accent-ink)}
 
-  /* add-animal sheet overlay */
   .sheet-scr{justify-content:flex-end}
   .dim{position:absolute; inset:0; background:rgba(0,0,0,.5)}
   .sheet{position:relative; background:var(--app-surf); border-radius:18px 18px 0 0; padding:14px 14px 16px; display:flex; flex-direction:column; gap:9px; border-top:1px solid var(--app-line)}
@@ -108,12 +92,10 @@
   .field .ph{color:var(--app-muted)}
   .save{background:var(--app-accent); color:var(--app-accent-ink); text-align:center; font-weight:700; font-size:12px; border-radius:10px; padding:10px; margin-top:2px}
 
-  /* books figures */
   .netbig{font-family:var(--serif); font-size:34px; font-weight:700; color:var(--app-accent); line-height:1}
   .money{font-variant-numeric:tabular-nums; font-weight:700}
   .in{color:var(--app-accent)} .out{color:#d98b6a}
 
-  /* tab bar */
   .tabs{display:flex; align-items:flex-end; justify-content:space-around; padding:7px 6px 9px; background:var(--app-surf); border-top:1px solid var(--app-line)}
   .tab{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:8px; color:var(--app-muted); flex:1}
   .tab.on{color:var(--app-accent)}
@@ -121,7 +103,7 @@
   .tab.add{position:relative}
   .tab.add .plus{width:34px; height:34px; border-radius:50%; background:var(--app-accent); color:var(--app-accent-ink); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; margin-bottom:6px; border:3px solid var(--app-surf); box-shadow:0 3px 8px rgba(0,0,0,.4)}
 
-  /* ---- tap indicator ---- */
+  /* tap indicator */
   .tap{position:absolute; z-index:6; width:34px; height:34px; margin:-17px 0 0 -17px; left:-999px; top:-999px; pointer-events:none; opacity:0}
   .tap .ring{position:absolute; inset:0; border-radius:50%; background:rgba(125,156,104,.42); border:2.5px solid #f4efe2; box-shadow:0 0 0 2px rgba(125,156,104,.3)}
   .tap.go{animation:tap .72s ease-out}
@@ -129,45 +111,40 @@
   @media (prefers-reduced-motion:reduce){ .tap.go{animation:tapr .72s ease-out} }
   @keyframes tapr{0%,100%{opacity:0} 25%,72%{opacity:1; transform:scale(1)}}
 
-  /* ---- beat 3: chip select reveals the fields ---- */
+  /* beat 3: chip select reveals the fields */
   .screen[data-i="3"] .reveal{opacity:0}
   .screen[data-i="3"].chosen .reveal{opacity:1}
   .screen[data-i="3"].chosen .chip-chickens{background:var(--app-accent); border-color:var(--app-accent); color:var(--app-accent-ink)}
   @media (prefers-reduced-motion:no-preference){ .screen[data-i="3"] .reveal{transition:opacity .45s ease} }
 
-  /* ---- caption + dots ---- */
-  .caption{z-index:3; margin-top:auto; text-align:center; min-height:74px; display:flex; align-items:center; justify-content:center; padding:0 6px}
-  .caption p{font-family:var(--serif); font-weight:700; font-size:22px; line-height:1.22; color:var(--ink); margin:0; text-wrap:balance}
+  /* footer: caption + dots */
+  .foot{flex:0 0 auto; z-index:3; width:100%; display:flex; flex-direction:column; align-items:center; padding-top:8px}
+  .caption{text-align:center; min-height:72px; display:flex; align-items:center; justify-content:center; padding:0 6px}
+  .caption p{font-family:var(--serif); font-weight:700; font-size:23px; line-height:1.22; color:var(--ink); margin:0; text-wrap:balance}
   .cap-anim{animation:capin .5s ease both}
   @keyframes capin{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
   @media (prefers-reduced-motion:reduce){ .cap-anim{animation:none} }
-  .dots{z-index:3; display:flex; gap:6px; margin-top:10px}
+  .dots{display:flex; gap:6px; margin-top:12px}
   .dot{width:6px; height:6px; border-radius:50%; background:rgba(63,82,54,.28)}
   .dot.on{background:var(--sage); transform:scale(1.15)}
 
-  /* ---- end card ---- */
-  .endcard{position:absolute; inset:0; z-index:5; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+  /* end card */
+  .endcard{position:absolute; inset:0; z-index:5; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
     padding:40px 34px; text-align:center; opacity:0; pointer-events:none;
-    background:radial-gradient(120% 80% at 50% 8%, var(--cream) 0%, var(--cream-2) 72%, #e7dfca 100%);}
+    background:radial-gradient(125% 70% at 50% 8%, var(--cream) 0%, var(--cream-2) 72%, #e7dfca 100%);}
   .endcard.show{opacity:1}
   @media (prefers-reduced-motion:no-preference){ .endcard{transition:opacity .6s ease} }
-  .endcard .badge{width:120px; height:120px; border-radius:50%; background:var(--sage); display:flex; align-items:center; justify-content:center; box-shadow:0 14px 30px rgba(63,82,54,.3)}
-  .endcard .badge svg{width:74px; height:74px}
-  .endcard .name{font-family:var(--serif); font-weight:700; font-size:34px; color:var(--ink); margin-top:4px}
-  .endcard .tag{font-size:14.5px; color:var(--sage-deep); max-width:22ch; line-height:1.35}
+  .endcard .badge{width:128px; height:128px; border-radius:50%; background:var(--sage); display:flex; align-items:center; justify-content:center; box-shadow:0 14px 30px rgba(63,82,54,.3)}
+  .endcard .badge svg{width:78px; height:78px}
+  .endcard .name{font-family:var(--serif); font-weight:700; font-size:36px; color:var(--ink); margin-top:4px}
+  .endcard .tag{font-size:15px; color:var(--sage-deep); max-width:22ch; line-height:1.35}
   .pills{display:flex; gap:8px; margin-top:2px}
-  .pill{font-size:11px; font-weight:700; color:var(--ink); background:rgba(110,142,94,.16); border:1px solid rgba(110,142,94,.4); border-radius:999px; padding:6px 12px}
-  .cta{margin-top:8px; background:var(--sage); color:var(--cream); font-weight:700; font-size:14px; padding:12px 26px; border-radius:999px}
-  .url{font-size:14px; font-weight:700; color:var(--ink); letter-spacing:.3px}
-
-  /* ---- offstage controls (not part of the recording) ---- */
-  .ctl{display:flex; align-items:center; gap:14px; color:#c9d0bf; font-size:12.5px}
-  .ctl button{font:inherit; font-weight:600; color:var(--page); background:var(--sun); border:0; border-radius:999px; padding:8px 16px; cursor:pointer}
-  .ctl button:focus-visible{outline:3px solid var(--glow); outline-offset:2px}
-  .hint{opacity:.8; max-width:405px; text-align:center; line-height:1.4}
+  .pill{font-size:12px; font-weight:700; color:var(--ink); background:rgba(110,142,94,.16); border:1px solid rgba(110,142,94,.4); border-radius:999px; padding:6px 13px}
+  .cta{margin-top:8px; background:var(--sage); color:var(--cream); font-weight:700; font-size:15px; padding:12px 28px; border-radius:999px}
+  .url{font-size:15px; font-weight:700; color:var(--ink); letter-spacing:.3px}
 </style>
 
-<div class="fit"><div class="stage" id="stage" role="img" aria-label="Homestead HQ app walkthrough">
+<div class="wrap" id="wrap"><div class="stage" id="stage" role="img" aria-label="Homestead HQ app walkthrough">
   <div class="brand">
     <svg class="barn" viewBox="0 0 100 100" aria-hidden="true"><g>
       <polygon points="12,52 50,16 88,52" fill="#3f5236"/><rect x="20" y="50" width="60" height="40" fill="#3f5236"/>
@@ -177,7 +154,7 @@
     <span class="wm">Homestead HQ</span>
   </div>
 
-  <div class="phone"><div class="screenwrap">
+  <div class="mid"><div class="phone"><div class="screenwrap">
 
     <!-- 0 · TODAY -->
     <section class="screen" data-i="0">
@@ -283,12 +260,13 @@
       <nav class="tabs"><div class="tab"><span class="ic">🌤️</span>Today</div><div class="tab"><span class="ic">🐾</span>Animals</div><div class="tab add"><span class="plus">＋</span></div><div class="tab"><span class="ic">🌱</span>Garden</div><div class="tab on"><span class="ic">⋯</span>More</div></nav>
     </section>
 
-  </div><div class="tap" id="tap"><span class="ring"></span></div></div>
+  </div><div class="tap" id="tap"><span class="ring"></span></div></div></div>
 
-  <div class="caption"><p id="cap">Your whole farm, on your phone</p></div>
-  <div class="dots" id="dots"></div>
+  <div class="foot">
+    <div class="caption"><p id="cap">Your whole farm, on your phone</p></div>
+    <div class="dots" id="dots"></div>
+  </div>
 
-  <!-- END CARD -->
   <div class="endcard" id="endcard">
     <div class="badge"><svg viewBox="0 0 100 100" aria-hidden="true"><g>
       <polygon points="12,52 50,16 88,52" fill="#f4efe2"/><rect x="20" y="50" width="60" height="40" fill="#f4efe2"/>
@@ -302,9 +280,6 @@
     <div class="url">myhomesteadhq.com</div>
   </div>
 </div></div>
-
-<div class="ctl"><button id="replay" type="button">↻ Play again</button><span>loops automatically</span></div>
-<p class="hint">Screen-record the phone card above for a ready-to-post Reel — it plays a full pass and loops.</p>
 
 <script>
 (function(){
@@ -323,15 +298,14 @@
   var endcard=document.getElementById('endcard');
   var dotwrap=document.getElementById('dots');
   var stage=document.getElementById('stage');
+  var wrap=document.getElementById('wrap');
   var phone=document.querySelector('.phone');
   var tap=document.getElementById('tap');
   var curScale=1;
 
-  // progress dots (one per phone beat, not the end card)
   var dots=[];
   beats.forEach(function(b){ if(!b.end){ var d=document.createElement('span'); d.className='dot'; dotwrap.appendChild(d); dots.push(d);} });
 
-  // fire the tap ripple centred on the control that drives the next screen
   function fireTap(spec){
     var scr=document.querySelector('.screen.on'); if(!scr) return;
     var el;
@@ -372,23 +346,24 @@
   }
   function start(){ clearPending(); show(0); }
 
-  // scale the 405x720 stage to fit the viewport
+  // scale the 405-wide stage to FILL the whole screen
   function fit(){
+    var vw=window.innerWidth;
     var vh=(window.visualViewport&&window.visualViewport.height)||window.innerHeight;
-    var availH=vh-140, availW=window.innerWidth-40;
-    var s=Math.min(availW/405, availH/720); if(!isFinite(s)||s<=0) s=1; s=Math.min(s,1.35);
+    var effW=Math.min(vw,460);
+    var s=effW/405; if(!isFinite(s)||s<=0) s=1;
+    var h=vh/s; if(h<740) h=740; if(h>1060) h=1060;
     curScale=s;
+    stage.style.height=h+'px';
     stage.style.transform='scale('+s+')';
-    stage.parentElement.style.width=(405*s)+'px';
-    stage.parentElement.style.height=(720*s)+'px';
   }
   window.addEventListener('resize',fit);
   window.addEventListener('orientationchange',function(){ setTimeout(fit,200); });
   if(window.visualViewport){ window.visualViewport.addEventListener('resize',fit); }
-  document.getElementById('replay').addEventListener('click',start);
+  wrap.addEventListener('click',start);
 
   fit(); start();
-  setTimeout(fit,300); setTimeout(fit,1000); // re-fit after the mobile URL bar settles
+  setTimeout(fit,300); setTimeout(fit,1000);
 })();
 </script>
 </body></html>
