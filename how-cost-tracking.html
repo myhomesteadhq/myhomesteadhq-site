@@ -1,0 +1,250 @@
+<title>Cost Tracking — Homestead HQ</title>
+<style>
+  :root{
+    --cream:#f4efe2; --cream-2:#efe8d6; --sage:#6e8e5e; --sage-deep:#5e7a50; --hill:#8aa676;
+    --ink:#3f5236; --straw:#c9a24a; --sun:#edc067; --glow:#f4d98f; --page:#1c2018;
+    --app-bg:#0f120d; --app-surf:#191d15; --app-card:#20261c; --app-line:#2c3327;
+    --app-text:#eef0e8; --app-muted:#8b9584; --app-accent:#7d9c68; --app-accent-ink:#0f120d; --alert:#d8a24a;
+    --serif:Georgia,"Times New Roman",serif; --sans:"Segoe UI",Roboto,-apple-system,system-ui,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--page); font-family:var(--sans); color:var(--cream); overflow:hidden}
+  .wrap{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:var(--page); overflow:hidden; cursor:pointer}
+  .stage{width:405px; transform-origin:center center;
+    background:radial-gradient(125% 70% at 50% -8%, var(--cream) 0%, var(--cream-2) 72%, #e7dfca 100%);
+    position:relative; overflow:hidden; display:flex; flex-direction:column; align-items:center; padding:34px 24px 30px}
+  .stage::before{content:""; position:absolute; left:0; right:0; bottom:0; height:210px;
+    background:radial-gradient(140% 100% at 25% 120%, var(--hill) 0 55%, transparent 56%),
+      radial-gradient(150% 100% at 90% 128%, var(--sage) 0 55%, transparent 56%); opacity:.9}
+  .stage::after{content:""; position:absolute; top:52px; right:42px; width:70px; height:70px; border-radius:50%;
+    background:radial-gradient(circle, var(--sun) 0 46%, var(--glow) 47% 100%); opacity:.85}
+  .brand{flex:0 0 auto; display:flex; align-items:center; gap:10px; z-index:3}
+  .brand .barn{width:32px; height:32px; display:block}
+  .brand .wm{font-family:var(--serif); font-weight:700; font-size:22px; color:var(--ink)}
+  .mid{flex:1 1 auto; min-height:0; width:100%; display:flex; align-items:center; justify-content:center}
+  .phone{z-index:3; width:264px; height:530px; border-radius:38px; background:#000; padding:9px; position:relative;
+    box-shadow:0 18px 34px rgba(50,60,40,.34), 0 2px 0 rgba(255,255,255,.5) inset}
+  .screenwrap{position:relative; width:100%; height:100%; border-radius:30px; overflow:hidden; background:var(--app-bg)}
+  .screen{position:absolute; inset:0; display:flex; flex-direction:column; opacity:0}
+  .screen.on{opacity:1}
+  @media (prefers-reduced-motion:no-preference){
+    .screen{transition:opacity .5s ease, transform .5s ease; transform:translateY(10px) scale(.995)}
+    .screen.on{transform:none}
+  }
+  .status{display:flex; justify-content:space-between; align-items:center; padding:9px 15px 2px; color:var(--app-text); font-size:9px; font-weight:600; opacity:.85}
+  .status .d{display:flex; gap:3px; align-items:center}
+  .status .bar{width:3px; height:7px; background:var(--app-text); border-radius:1px; opacity:.9}
+  .status .bat{width:14px; height:7px; border:1px solid var(--app-text); border-radius:2px; position:relative}
+  .status .bat::after{content:""; position:absolute; inset:1px; right:4px; background:var(--app-accent); border-radius:1px}
+  .apphead{padding:6px 16px 8px; color:var(--app-text)}
+  .apphead h1{margin:0; font-size:18px; font-weight:700}
+  .apphead .sub{font-size:10px; color:var(--app-muted); margin-top:2px}
+  .body{flex:1; overflow:hidden; padding:2px 14px 8px; display:flex; flex-direction:column; gap:7px}
+  .card{background:var(--app-card); border:1px solid var(--app-line); border-radius:12px; padding:9px 10px; color:var(--app-text)}
+  .row{display:flex; align-items:center; gap:9px}
+  .em{font-size:18px; width:27px; height:27px; display:flex; align-items:center; justify-content:center; background:var(--app-surf); border-radius:8px; flex:0 0 auto}
+  .t{font-size:12px; font-weight:600; line-height:1.25}
+  .s{font-size:9.5px; color:var(--app-muted); margin-top:1px; line-height:1.25}
+  .push{margin-left:auto} .when{font-size:9px; color:var(--app-muted); white-space:nowrap}
+  .lede{font-size:9.5px; color:var(--app-muted); text-transform:uppercase; letter-spacing:.6px; margin:3px 1px 0}
+  .netbig{font-family:var(--serif); font-size:34px; font-weight:700; color:var(--app-accent); line-height:1}
+  .money{font-variant-numeric:tabular-nums; font-weight:700}
+  .in{color:var(--app-accent)} .out{color:#d98b6a}
+  .new{border:1px solid var(--app-accent); box-shadow:0 0 0 2px rgba(125,156,104,.22)}
+  .chips{display:flex; gap:6px; flex-wrap:wrap}
+  .chip{font-size:9.5px; font-weight:600; color:var(--app-text); background:var(--app-surf); border:1px solid var(--app-line); border-radius:999px; padding:5px 9px}
+  .chip.on{background:var(--app-accent); border-color:var(--app-accent); color:var(--app-accent-ink)}
+  .addbtn{margin:0 14px 8px; background:var(--app-accent); color:var(--app-accent-ink); text-align:center; font-weight:700; font-size:12.5px; border-radius:12px; padding:11px}
+  .sheet-scr{justify-content:flex-end}
+  .dim{position:absolute; inset:0; background:rgba(0,0,0,.5)}
+  .sheet{position:relative; background:var(--app-surf); border-radius:18px 18px 0 0; padding:14px 14px 16px; display:flex; flex-direction:column; gap:8px; border-top:1px solid var(--app-line)}
+  .grab{width:36px; height:4px; border-radius:2px; background:var(--app-line); align-self:center; margin-bottom:2px}
+  .sheet h2{margin:0; font-size:15px; color:var(--app-text); font-weight:700}
+  .field{background:var(--app-card); border:1px solid var(--app-line); border-radius:10px; padding:9px 10px; font-size:11px; color:var(--app-text)}
+  .field .ph{color:var(--app-muted)}
+  .save{background:var(--app-accent); color:var(--app-accent-ink); text-align:center; font-weight:700; font-size:12px; border-radius:10px; padding:10px; margin-top:2px}
+  /* add-to-homestead choices */
+  .choice{display:flex; align-items:center; gap:11px; background:var(--app-card); border:1px solid var(--app-line); border-radius:12px; padding:11px}
+  .cicon{font-size:20px; width:30px; text-align:center}
+  .ctitle{font-size:12px; font-weight:600; color:var(--app-text)}
+  .csub{font-size:9px; color:var(--app-muted); margin-top:1px}
+  .chev{margin-left:auto; color:var(--app-muted); font-size:16px}
+  .tabs{display:flex; align-items:flex-end; justify-content:space-around; padding:7px 6px 9px; background:var(--app-surf); border-top:1px solid var(--app-line)}
+  .tab{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:8px; color:var(--app-muted); flex:1}
+  .tab.on{color:var(--app-accent)} .tab .ic{font-size:15px}
+  .tab.add{position:relative}
+  .tab.add .plus{width:34px; height:34px; border-radius:50%; background:var(--app-accent); color:var(--app-accent-ink); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; margin-bottom:6px; border:3px solid var(--app-surf)}
+  .tap{position:absolute; z-index:6; width:34px; height:34px; margin:-17px 0 0 -17px; left:-999px; top:-999px; pointer-events:none; opacity:0}
+  .tap .ring{position:absolute; inset:0; border-radius:50%; background:rgba(125,156,104,.42); border:2.5px solid #f4efe2; box-shadow:0 0 0 2px rgba(125,156,104,.3)}
+  .tap.go{animation:tap .72s ease-out}
+  @keyframes tap{0%{opacity:0; transform:scale(.35)} 18%{opacity:1} 55%{opacity:.85} 100%{opacity:0; transform:scale(1.65)}}
+  @media (prefers-reduced-motion:reduce){ .tap.go{animation:tapr .72s ease-out} }
+  @keyframes tapr{0%,100%{opacity:0} 25%,72%{opacity:1; transform:scale(1)}}
+  .foot{flex:0 0 auto; z-index:3; width:100%; display:flex; flex-direction:column; align-items:center; padding-top:8px}
+  .caption{text-align:center; min-height:72px; display:flex; align-items:center; justify-content:center; padding:0 6px}
+  .caption p{font-family:var(--serif); font-weight:700; font-size:23px; line-height:1.22; color:var(--ink); margin:0; text-wrap:balance}
+  .cap-anim{animation:capin .5s ease both}
+  @keyframes capin{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+  @media (prefers-reduced-motion:reduce){ .cap-anim{animation:none} }
+  .dots{display:flex; gap:6px; margin-top:12px}
+  .dot{width:6px; height:6px; border-radius:50%; background:rgba(63,82,54,.28)}
+  .dot.on{background:var(--sage); transform:scale(1.15)}
+  .endcard{position:absolute; inset:0; z-index:5; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
+    padding:40px 34px; text-align:center; opacity:0; pointer-events:none;
+    background:radial-gradient(125% 70% at 50% 8%, var(--cream) 0%, var(--cream-2) 72%, #e7dfca 100%)}
+  .endcard.show{opacity:1}
+  @media (prefers-reduced-motion:no-preference){ .endcard{transition:opacity .6s ease} }
+  .endcard .badge2{width:128px; height:128px; border-radius:50%; background:var(--sage); display:flex; align-items:center; justify-content:center; box-shadow:0 14px 30px rgba(63,82,54,.3)}
+  .endcard .badge2 svg{width:78px; height:78px}
+  .endcard .name{font-family:var(--serif); font-weight:700; font-size:34px; color:var(--ink); margin-top:4px}
+  .endcard .tag{font-size:15px; color:var(--sage-deep); max-width:22ch; line-height:1.35}
+  .pills{display:flex; gap:8px; margin-top:2px}
+  .pill{font-size:12px; font-weight:700; color:var(--ink); background:rgba(110,142,94,.16); border:1px solid rgba(110,142,94,.4); border-radius:999px; padding:6px 13px}
+  .url{font-size:15px; font-weight:700; color:var(--ink); letter-spacing:.3px; margin-top:6px}
+</style>
+
+<div class="wrap" id="wrap"><div class="stage" id="stage" role="img" aria-label="Cost tracking in Homestead HQ">
+  <div class="brand">
+    <svg class="barn" viewBox="0 0 100 100" aria-hidden="true"><g>
+      <polygon points="12,52 50,16 88,52" fill="#3f5236"/><rect x="20" y="50" width="60" height="40" fill="#3f5236"/>
+      <circle cx="50" cy="41" r="6" fill="#f4efe2"/><rect x="42" y="60" width="16" height="30" fill="#f4efe2"/>
+      <path d="M42 60 L58 90 M58 60 L42 90" stroke="#3f5236" stroke-width="2.6" fill="none"/>
+    </g></svg><span class="wm">Homestead HQ</span>
+  </div>
+
+  <div class="mid"><div class="phone"><div class="screenwrap">
+
+    <!-- 0 · BOOKS (before) -->
+    <section class="screen" data-i="0">
+      <div class="status"><span>6:42</span><span class="d"><span class="bar"></span><span class="bar"></span><span class="bat"></span></span></div>
+      <div class="apphead"><h1>Books</h1><div class="sub">This season</div></div>
+      <div class="body">
+        <div class="card"><div class="s" style="margin:0 0 3px">Net so far</div><div class="netbig money">+ $1,620</div></div>
+        <div class="card row"><span class="em">🥚</span><div><div class="t">Eggs sold</div><div class="s">farm stand</div></div><span class="push money in">+ $210</span></div>
+        <div class="card row"><span class="em">🩺</span><div><div class="t">Vet — Bluebell</div><div class="s">preg check</div></div><span class="push money out">− $95</span></div>
+      </div>
+      <div class="addbtn add-txn">＋ Log money</div>
+      <nav class="tabs"><div class="tab"><span class="ic">🌤️</span>Today</div><div class="tab"><span class="ic">🐾</span>Animals</div><div class="tab add"><span class="plus">＋</span></div><div class="tab"><span class="ic">🌱</span>Garden</div><div class="tab on"><span class="ic">⋯</span>More</div></nav>
+    </section>
+
+    <!-- 1 · LOG MONEY FORM -->
+    <section class="screen sheet-scr" data-i="1">
+      <div class="status"><span>6:42</span><span class="d"><span class="bar"></span><span class="bar"></span><span class="bat"></span></span></div>
+      <div class="apphead"><h1>Books</h1></div>
+      <div class="body"><div class="card" style="opacity:.5"><div class="s" style="margin:0 0 3px">Net so far</div><div class="netbig money">+ $1,620</div></div></div>
+      <div class="dim"></div>
+      <div class="sheet">
+        <span class="grab"></span><h2>Log money</h2>
+        <div class="chips"><span class="chip on">Money out</span><span class="chip">Money in</span></div>
+        <div class="field"><span class="ph">Amount — </span>$380</div>
+        <div class="lede" style="margin:0">Category</div>
+        <div class="chips"><span class="chip on">Feed</span><span class="chip">Vet</span><span class="chip">Seed</span><span class="chip">Fuel</span></div>
+        <div class="lede" style="margin:0">For</div>
+        <div class="chips"><span class="chip on">🐔 Backyard layers</span><span class="chip">Whole farm</span></div>
+        <div class="save btn-save">Save</div>
+      </div>
+    </section>
+
+    <!-- 2 · BOOKS (after) + per-animal cost -->
+    <section class="screen" data-i="2">
+      <div class="status"><span>6:42</span><span class="d"><span class="bar"></span><span class="bar"></span><span class="bat"></span></span></div>
+      <div class="apphead"><h1>Books</h1><div class="sub">This season</div></div>
+      <div class="body">
+        <div class="card"><div class="s" style="margin:0 0 3px">Net so far</div><div class="netbig money">+ $1,240</div></div>
+        <div class="card row new"><span class="em">🌾</span><div><div class="t">Feed — Backyard layers</div><div class="s">Tractor Supply</div></div><span class="push money out">− $380</span></div>
+        <div class="card row"><span class="em">🥚</span><div><div class="t">Eggs sold</div><div class="s">farm stand</div></div><span class="push money in">+ $210</span></div>
+        <div class="card row"><span class="em">📊</span><div><div class="t">Cost per hen</div><div class="s">feed ÷ eggs</div></div><span class="push money">$0.08/egg</span></div>
+      </div>
+      <nav class="tabs"><div class="tab"><span class="ic">🌤️</span>Today</div><div class="tab"><span class="ic">🐾</span>Animals</div><div class="tab add"><span class="plus">＋</span></div><div class="tab"><span class="ic">🌱</span>Garden</div><div class="tab on"><span class="ic">⋯</span>More</div></nav>
+    </section>
+
+    <!-- 3 · ADD SHEET (breadth) -->
+    <section class="screen sheet-scr" data-i="3">
+      <div class="status"><span>6:42</span><span class="d"><span class="bar"></span><span class="bar"></span><span class="bat"></span></span></div>
+      <div class="apphead"><h1>Today</h1></div>
+      <div class="body"></div>
+      <div class="dim"></div>
+      <div class="sheet">
+        <span class="grab"></span><h2>Add to your homestead</h2>
+        <div class="choice"><span class="cicon">📋</span><div><div class="ctitle">Log something</div><div class="csub">Vaccination, vet visit, hoof trim, treatment…</div></div><span class="chev">›</span></div>
+        <div class="choice"><span class="cicon">✅</span><div><div class="ctitle">Add a task</div><div class="csub">A reminder or chore, once or repeating</div></div><span class="chev">›</span></div>
+        <div class="choice"><span class="cicon">🐾</span><div><div class="ctitle">Add an animal</div><div class="csub">A new arrival, or one you forgot to enter</div></div><span class="chev">›</span></div>
+        <div class="choice"><span class="cicon">🌱</span><div><div class="ctitle">Add a planting</div><div class="csub">Tomatoes, lettuce, herbs — anything you grow</div></div><span class="chev">›</span></div>
+      </div>
+    </section>
+
+  </div><div class="tap" id="tap"><span class="ring"></span></div></div></div>
+
+  <div class="foot">
+    <div class="caption"><p id="cap">Track every dollar on your homestead</p></div>
+    <div class="dots" id="dots"></div>
+  </div>
+
+  <div class="endcard" id="endcard">
+    <div class="badge2"><svg viewBox="0 0 100 100" aria-hidden="true"><g>
+      <polygon points="12,52 50,16 88,52" fill="#f4efe2"/><rect x="20" y="50" width="60" height="40" fill="#f4efe2"/>
+      <circle cx="50" cy="41" r="6" fill="#6e8e5e"/><rect x="42" y="60" width="16" height="30" fill="#6e8e5e"/>
+      <path d="M42 60 L58 90 M58 60 L42 90" stroke="#6e8e5e" stroke-width="2.6" fill="none"/>
+    </g></svg></div>
+    <div class="name">Homestead HQ</div>
+    <div class="tag">Animals · health · breeding · costs · garden — offline</div>
+    <div class="pills"><span class="pill">Free</span><span class="pill">Offline</span><span class="pill">No ads</span></div>
+    <div class="url">myhomesteadhq.com</div>
+  </div>
+</div></div>
+
+<script>
+(function(){
+  var beats=[
+    {i:0,cap:"Track every dollar on your homestead",ms:3800,taps:[{sel:".add-txn",at:2600}]},
+    {i:1,cap:"Log a cost or sale — tie it to any animal",ms:4200,taps:[{sel:".btn-save",at:2900}]},
+    {i:2,cap:"See profit & cost, per animal",ms:4000,taps:[]},
+    {i:3,cap:"Plus health, tasks, animals & plantings",ms:4000,taps:[]},
+    {end:true,ms:4600}
+  ];
+  var screens=[].slice.call(document.querySelectorAll('.screen'));
+  var cap=document.getElementById('cap'), endcard=document.getElementById('endcard'),
+      dotwrap=document.getElementById('dots'), stage=document.getElementById('stage'),
+      wrap=document.getElementById('wrap'), phone=document.querySelector('.phone'), tap=document.getElementById('tap');
+  var curScale=1, dots=[];
+  beats.forEach(function(b){ if(!b.end){ var d=document.createElement('span'); d.className='dot'; dotwrap.appendChild(d); dots.push(d);} });
+  function fireTap(spec){
+    var scr=document.querySelector('.screen.on'); if(!scr) return;
+    var el=scr.querySelector(spec.sel); if(!el) return;
+    var w=phone.getBoundingClientRect(), t=el.getBoundingClientRect();
+    tap.style.left=((t.left+t.width/2-w.left)/curScale)+'px';
+    tap.style.top=((t.top+t.height/2-w.top)/curScale)+'px';
+    tap.classList.remove('go'); void tap.offsetWidth; tap.classList.add('go');
+  }
+  var pending=[];
+  function clearPending(){ pending.forEach(clearTimeout); pending=[]; }
+  function show(n){
+    clearPending(); var b=beats[n];
+    if(b.end){
+      screens.forEach(function(s){s.classList.remove('on');});
+      endcard.classList.add('show'); dots.forEach(function(d){d.classList.remove('on');});
+    } else {
+      endcard.classList.remove('show');
+      screens.forEach(function(s){ s.classList.toggle('on', +s.dataset.i===b.i); });
+      cap.textContent=b.cap;
+      cap.classList.remove('cap-anim'); void cap.offsetWidth; cap.classList.add('cap-anim');
+      dots.forEach(function(d,k){ d.classList.toggle('on', k===n); });
+      (b.taps||[]).forEach(function(tp){ pending.push(setTimeout(function(){ fireTap(tp); }, tp.at)); });
+    }
+    pending.push(setTimeout(function(){ show((n+1)%beats.length); }, b.ms));
+  }
+  function start(){ clearPending(); show(0); }
+  function fit(){
+    var vw=window.innerWidth, vh=(window.visualViewport&&window.visualViewport.height)||window.innerHeight;
+    var s=Math.min(vw,460)/405; if(!isFinite(s)||s<=0) s=1;
+    var h=vh/s; if(h<740) h=740; if(h>1060) h=1060;
+    curScale=s; stage.style.height=h+'px'; stage.style.transform='scale('+s+')';
+  }
+  window.addEventListener('resize',fit);
+  window.addEventListener('orientationchange',function(){ setTimeout(fit,200); });
+  if(window.visualViewport){ window.visualViewport.addEventListener('resize',fit); }
+  wrap.addEventListener('click',start);
+  fit(); start(); setTimeout(fit,300); setTimeout(fit,1000);
+})();
+</script>
