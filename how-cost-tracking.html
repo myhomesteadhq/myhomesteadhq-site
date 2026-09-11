@@ -10,7 +10,7 @@
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
   body{background:var(--page); font-family:var(--sans); color:var(--cream); overflow:hidden}
-  .wrap{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:var(--cream); overflow:hidden; cursor:pointer}
+  .wrap{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:var(--page); overflow:hidden; cursor:pointer}
   .stage{width:405px; transform-origin:center center;
     background:radial-gradient(125% 70% at 50% -8%, var(--cream) 0%, var(--cream-2) 72%, #e7dfca 100%);
     position:relative; overflow:hidden; display:flex; flex-direction:column; align-items:center; padding:34px 24px 30px}
@@ -235,13 +235,11 @@
     pending.push(setTimeout(function(){ show((n+1)%beats.length); }, b.ms));
   }
   function start(){ clearPending(); show(0); }
-  var NAT_H=880; // stage natural height (px) — matches the 405-wide design
   function fit(){
     var vw=window.innerWidth, vh=(window.visualViewport&&window.visualViewport.height)||window.innerHeight;
-    stage.style.height=NAT_H+'px';
-    // COVER: fill the whole screen on both axes, no letterbox bars
-    var s=Math.max(vw/405, vh/NAT_H); if(!isFinite(s)||s<=0) s=1;
-    curScale=s; stage.style.transform='scale('+s+')';
+    var s=Math.min(vw,460)/405; if(!isFinite(s)||s<=0) s=1;
+    var h=vh/s; if(h<740) h=740; if(h>1060) h=1060;
+    curScale=s; stage.style.height=h+'px'; stage.style.transform='scale('+s+')';
   }
   window.addEventListener('resize',fit);
   window.addEventListener('orientationchange',function(){ setTimeout(fit,200); });
