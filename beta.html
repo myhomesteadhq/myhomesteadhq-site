@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Join the Homestead HQ Android beta: free offline animal records</title>
+<meta name="description" content="Free offline animal records for homesteaders: animals, treatments, breedings and due dates on your Android phone. Join the beta in 2 steps. Free during the beta, and beta testers keep it free forever.">
+<link rel="canonical" href="https://myhomesteadhq.com/beta">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#6e8e5e">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Homestead HQ">
+<meta property="og:url" content="https://myhomesteadhq.com/beta">
+<meta property="og:title" content="Homestead HQ Android beta: free offline animal records">
+<meta property="og:description" content="Animals, treatments, breedings and due dates on your phone, even with no signal. Join the beta in 2 steps. Beta testers keep it free forever.">
+<meta property="og:image" content="https://myhomesteadhq.com/og-beta.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Homestead HQ logo: free offline animal records for homesteaders, Android beta">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Homestead HQ Android beta: free offline animal records">
+<meta name="twitter:description" content="Animals, treatments, breedings and due dates on your phone, even with no signal. Join the beta in 2 steps. Beta testers keep it free forever.">
+<meta name="twitter:image" content="https://myhomesteadhq.com/og-beta.png">
+<meta name="twitter:image:alt" content="Homestead HQ logo: free offline animal records for homesteaders, Android beta">
+<style>
+  :root{
+    --cream:#f4efe2; --card:#fbf7ee; --ink:#3f5236; --tag:#5e7a50; --muted:#6b6a5e;
+    --sage:#6e8e5e; --sage-d:#5a7a4c; --edge:#e2dac6; --straw:#c9a24a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--cream); color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    min-height:100vh; display:flex; flex-direction:column;
+    -webkit-font-smoothing:antialiased; -webkit-text-size-adjust:100%;
+  }
+  a{color:var(--sage-d)}
+  .wrap{flex:1; width:100%; max-width:560px; margin:0 auto; padding:26px 18px 8px;}
+  header{text-align:center}
+  .brand{display:inline-flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink);
+    font-family:Georgia,"Times New Roman",serif; font-weight:700; font-size:19px;}
+  .brand svg{width:40px; height:40px}
+  .pill{display:inline-block; margin:16px 0 0; padding:5px 12px; border-radius:999px; background:#eaf0e1;
+    color:var(--tag); font-size:13px; font-weight:700; letter-spacing:.02em; text-transform:uppercase;}
+  h1{font-family:Georgia,"Times New Roman",serif; font-weight:700; font-size:clamp(29px,8.4vw,42px);
+    line-height:1.12; margin:12px 0 0; letter-spacing:-.01em;}
+  .sub{color:var(--muted); font-size:16.5px; line-height:1.55; margin:12px auto 0; max-width:460px;}
+  .promise{margin:18px 0 0; padding:13px 16px; border-radius:14px; background:var(--card);
+    border:2px dashed var(--straw); text-align:center; font-size:16px; line-height:1.45;}
+  .promise strong{display:block; font-size:17.5px}
+
+  .steps{list-style:none; margin:22px 0 0; padding:0; display:flex; flex-direction:column; gap:14px;}
+  .step{background:var(--card); border:1px solid var(--edge); border-radius:18px; padding:16px 16px 14px;}
+  .step-top{display:flex; align-items:center; gap:10px; margin:0 0 12px; font-weight:700; font-size:14px;
+    color:var(--tag); text-transform:uppercase; letter-spacing:.04em;}
+  .num{flex:none; width:32px; height:32px; border-radius:50%; background:var(--sage); color:var(--cream);
+    display:flex; align-items:center; justify-content:center; font-size:17px; font-family:Georgia,serif;}
+  .btn{display:flex; align-items:center; justify-content:center; gap:8px; width:100%; min-height:62px;
+    text-decoration:none; font-size:19px; font-weight:800; line-height:1.2; text-align:center;
+    padding:16px 18px; border-radius:14px; border:2px solid var(--sage);
+    background:var(--sage); color:#f4efe2; box-shadow:0 3px 0 var(--sage-d);
+    transition:transform .05s ease, background .15s ease;}
+  .btn:hover{background:var(--sage-d); border-color:var(--sage-d)}
+  .btn:active{transform:translateY(2px); box-shadow:0 1px 0 var(--sage-d)}
+  .btn .arrow{font-size:22px; line-height:1}
+  .step p{margin:11px 2px 0; color:var(--muted); font-size:14.5px; line-height:1.5}
+  .step p b{color:var(--ink)}
+  .tip{margin:14px 2px 0; color:var(--muted); font-size:13.5px; line-height:1.5; text-align:center}
+
+  .demo{display:block; margin:18px 0 0; text-align:center; text-decoration:none; font-weight:700; font-size:16px;
+    color:var(--ink); padding:13px 16px; border-radius:14px; border:2px solid var(--sage); background:transparent;}
+  .demo:hover{background:#eaf0e1}
+  .demo small{display:block; font-weight:500; color:var(--muted); font-size:13px; margin-top:2px}
+
+  h2{font-family:Georgia,"Times New Roman",serif; font-size:22px; margin:30px 0 10px; text-align:center}
+  details{background:var(--card); border:1px solid var(--edge); border-radius:14px; margin:0 0 10px; padding:0 16px;}
+  summary{cursor:pointer; list-style:none; font-weight:700; font-size:16px; padding:14px 22px 14px 0; position:relative;}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+"; position:absolute; right:0; top:11px; font-size:22px; color:var(--sage); font-weight:700}
+  details[open] summary::after{content:"–"}
+  details p{margin:0 0 14px; color:var(--muted); font-size:15px; line-height:1.55}
+
+  .field{display:block; width:100%; height:auto; margin-top:26px}
+  footer{text-align:center; font-size:12.5px; line-height:1.6; padding:14px 16px; background:var(--sage); color:#eef1e6;}
+  footer a{color:#eef1e6;}
+  footer .small{opacity:.85; font-size:11.5px}
+  @media (min-width:700px){ .wrap{padding-top:44px} }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <a class="brand" href="/" aria-label="Homestead HQ home">
+        <svg viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="50" fill="#6e8e5e"/>
+          <g transform="translate(50,53) scale(0.62) translate(-50,-53)">
+            <polygon points="12,52 50,16 88,52" fill="#f5efe1"/>
+            <rect x="20" y="50" width="60" height="40" fill="#f5efe1"/>
+            <circle cx="50" cy="41" r="6" fill="#6e8e5e"/>
+            <rect x="42" y="60" width="16" height="30" fill="#6e8e5e"/>
+            <path d="M42 60 L58 90 M58 60 L42 90" stroke="#f5efe1" stroke-width="2.6" fill="none"/>
+          </g>
+        </svg>
+        Homestead HQ
+      </a>
+      <div><span class="pill">Android beta · testers wanted</span></div>
+      <h1>Free offline animal records for homesteaders</h1>
+      <p class="sub">Animals, breeds, treatments, breedings and due dates, right on your phone. Works with no signal. No account.</p>
+    </header>
+
+    <div class="promise"><strong>Free during the beta.</strong>Beta testers keep it free forever.</div>
+
+    <ol class="steps">
+      <li class="step">
+        <div class="step-top"><span class="num">1</span>Step 1</div>
+        <a class="btn" id="step1" data-track="step1" href="https://groups.google.com/g/homestead-hq-testers" target="_blank" rel="noopener">Join the tester group <span class="arrow" aria-hidden="true">›</span></a>
+        <p>Tap <b>“Join group”</b>. Use the <b>same Google account that’s on your Android phone’s Play Store</b>.</p>
+      </li>
+      <li class="step">
+        <div class="step-top"><span class="num">2</span>Step 2</div>
+        <a class="btn" id="step2" data-track="step2" href="https://play.google.com/apps/testing/com.homesteadhq.app" target="_blank" rel="noopener">Get the app on Google Play <span class="arrow" aria-hidden="true">›</span></a>
+        <p>Tap <b>“Become a tester”</b>, then install Homestead HQ from Google Play.</p>
+        <p><b>Step 2 only works after Step 1.</b> If it says the app isn’t available, give it a few minutes after joining the group and try again.</p>
+      </li>
+    </ol>
+
+    <p class="tip">Opened this inside Instagram, TikTok or Facebook? If Google asks you to sign in, tap the menu (<b>⋮</b> or <b>…</b>) and choose <b>“Open in browser”</b> (Chrome), where you’re already signed in.</p>
+
+    <a class="demo" data-track="demo" href="https://homestead-hq-demo.netlify.app" target="_blank" rel="noopener">Try the demo in your browser<small>No install needed. See how it works first.</small></a>
+
+    <h2>Questions</h2>
+    <details>
+      <summary>Is there an iPhone version?</summary>
+      <p>Not yet. Homestead HQ is Android only for now, and the iPhone version isn’t available yet. You can still try the demo in any browser.</p>
+    </details>
+    <details>
+      <summary>How long should I keep it installed?</summary>
+      <p>Please keep the app installed and stay in the tester group for at least 14 days. Google only approves the app for public release after enough testers stay opted in for 14 days in a row, so every day counts.</p>
+    </details>
+    <details>
+      <summary>Does it really cost nothing?</summary>
+      <p>It’s free during the beta, and beta testers keep it free forever.</p>
+    </details>
+    <details>
+      <summary>Does it need internet or an account?</summary>
+      <p>No. Your records are saved on your phone, so it works in the barn, the back pasture, anywhere. There’s nothing to sign up for.</p>
+    </details>
+    <details>
+      <summary>How do I send feedback or report a bug?</summary>
+      <p>Email <a href="mailto:support@myhomesteadhq.com">support@myhomesteadhq.com</a>. A real person reads every message, and tester feedback shapes what gets built next.</p>
+    </details>
+  </main>
+
+  <svg class="field" viewBox="0 0 1200 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <rect width="1200" height="200" fill="#f4efe2"/>
+    <circle cx="1052" cy="58" r="58" fill="#f4d98f"/><circle cx="1052" cy="58" r="40" fill="#edc067"/>
+    <path d="M0 118 Q300 94 600 110 T1200 106 L1200 200 L0 200 Z" fill="#8aa676"/>
+    <path d="M0 150 Q350 124 700 144 T1200 140 L1200 200 L0 200 Z" fill="#6e8e5e"/>
+    <g stroke="#c9a24a" stroke-width="3.2" stroke-linecap="round" fill="none">
+      <g transform="translate(120,150)"><path d="M0 0V-64"/><path d="M0 -26l9 -7M0 -26l-9 -6M0 -36l8 -6M0 -36l-8 -5M0 -46l7 -6M0 -46l-7 -5M0 -56l6 -5M0 -56l-6 -4"/></g>
+      <g transform="translate(150,152) rotate(12)"><path d="M0 0V-58"/><path d="M0 -24l8 -6M0 -24l-8 -5M0 -34l7 -6M0 -34l-7 -5M0 -44l6 -5M0 -44l-6 -4M0 -52l5 -4M0 -52l-5 -4"/></g>
+      <g transform="translate(90,152) rotate(-12)"><path d="M0 0V-58"/><path d="M0 -24l8 -6M0 -24l-8 -5M0 -34l7 -6M0 -34l-7 -5M0 -44l6 -5M0 -44l-6 -4M0 -52l5 -4M0 -52l-5 -4"/></g>
+      <g transform="translate(1075,150)"><path d="M0 0V-64"/><path d="M0 -26l9 -7M0 -26l-9 -6M0 -36l8 -6M0 -36l-8 -5M0 -46l7 -6M0 -46l-7 -5M0 -56l6 -5M0 -56l-6 -4"/></g>
+      <g transform="translate(1105,152) rotate(12)"><path d="M0 0V-58"/><path d="M0 -24l8 -6M0 -24l-8 -5M0 -34l7 -6M0 -34l-7 -5M0 -44l6 -5M0 -44l-6 -4"/></g>
+      <g transform="translate(1045,152) rotate(-12)"><path d="M0 0V-58"/><path d="M0 -24l8 -6M0 -24l-8 -5M0 -34l7 -6M0 -34l-7 -5M0 -44l6 -5M0 -44l-6 -4"/></g>
+    </g>
+  </svg>
+
+  <footer>© 2026 Homestead HQ · your data stays on your device · <a href="privacy.html">Privacy</a> · <a href="support.html">Support</a><br>
+    <span class="small">This page counts visits and button taps by link source (like ?src=ig). No cookies, no personal data.</span></footer>
+
+<script>
+(function () {
+  // Anonymous per-source counters (visits + Step 1/Step 2/demo taps). No cookies, no personal data.
+  var ENDPOINT = "https://homestead-hq-beta-stats.netlify.app/.netlify/functions/track";
+  var src = "direct", isNew = false;
+  function clean(s) { return (String(s || "").toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, 24)) || "direct"; }
+  try {
+    var q = new URLSearchParams(location.search).get("src");
+    if (q) { src = clean(q); sessionStorage.setItem("hhq_src", src); }
+    else { src = sessionStorage.getItem("hhq_src") || "direct"; }
+    if (!sessionStorage.getItem("hhq_seen")) { sessionStorage.setItem("hhq_seen", "1"); isNew = true; }
+  } catch (e) {}
+  function send(ev, extra) {
+    var u = ENDPOINT + "?ev=" + ev + "&src=" + encodeURIComponent(src) + (extra || "");
+    try { if (navigator.sendBeacon && navigator.sendBeacon(u)) return; } catch (e) {}
+    try { fetch(u, { method: "POST", mode: "no-cors", keepalive: true }); } catch (e) {}
+  }
+  send("visit", isNew ? "&new=1" : "");
+  var links = document.querySelectorAll("[data-track]");
+  for (var i = 0; i < links.length; i++) {
+    links[i].addEventListener("click", function () { send(this.getAttribute("data-track")); });
+  }
+})();
+</script>
+</body>
+</html>

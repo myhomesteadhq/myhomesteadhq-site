@@ -1,0 +1,9 @@
+{
+  "name": "homestead-hq-beta-stats",
+  "private": true,
+  "type": "module",
+  "description": "Anonymous per-source visit/click counters for myhomesteadhq.com/beta (Netlify Functions + Netlify Blobs, free tier).",
+  "dependencies": {
+    "@netlify/blobs": "^11.1.1"
+  }
+}
