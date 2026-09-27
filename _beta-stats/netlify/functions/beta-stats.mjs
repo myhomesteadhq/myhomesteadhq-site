@@ -56,6 +56,7 @@ export default async (req) => {
   const total = Object.fromEntries(COLS.map((c) => [c, Object.values(rows).reduce((n, r) => n + r[c], 0)]));
   const sorted = Object.entries(rows).sort((a, b) => b[1].visit - a[1].visit);
   const iso = (t) => (t === null ? null : new Date(t).toISOString());
+  const ct = (t) => (t === null ? "none" : new Date(t).toLocaleString("en-US", { timeZone: "America/Chicago", dateStyle: "medium", timeStyle: "short" }) + " CT");
 
   if (url.searchParams.get("format") === "json") {
     return Response.json({ since: sinceStr || null, first: iso(first), last: iso(last), total, bySource: Object.fromEntries(sorted) }, { headers });
@@ -70,7 +71,7 @@ table{border-collapse:collapse;width:100%;max-width:760px;background:#fbf7ee}th,
 th:first-child,td:first-child{text-align:left}thead th{background:#6e8e5e;color:#f4efe2}tfoot th{background:#eaf0e1}
 p{color:#6b6a5e;font-size:14px;max-width:760px;line-height:1.5}</style></head><body>
 <h1 style="font-family:Georgia,serif">myhomesteadhq.com/beta: visits &amp; taps by source</h1>
-<p>${sinceStr ? `Counting events since ${esc(sinceStr)} (UTC). ` : ""}First event: ${iso(first) || "none"} · last event: ${iso(last) || "none"} (UTC).</p>
+<p>${sinceStr ? `Counting events since ${esc(sinceStr)} (UTC). ` : ""}First event: ${ct(first)} · last event: ${ct(last)}.</p>
 <div style="overflow-x:auto"><table><thead><tr><th>source</th><th>visits</th><th>sessions</th><th>Step 1 taps</th><th>Step 2 taps</th><th>demo taps</th><th>Step 1 / session</th><th>Step 2 / session</th></tr></thead>
 <tbody>${sorted.map(([s, r]) => tr(s, r)).join("") || `<tr><td colspan="8">No events yet.</td></tr>`}</tbody>
 <tfoot>${tr("total", total, "th")}</tfoot></table></div>
